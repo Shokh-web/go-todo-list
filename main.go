@@ -1,5 +1,5 @@
 // -*- Author: -*-
-// -*- Info: -*-
+// -*- Info: A lightweight and easy-to-use Todo List app -*-
 
 package main
 
