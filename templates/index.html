@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GO TODO-LIST</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #212121;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #333;
+        border: 1px solid #444;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+      }
+
+      #add-todo-button {
+        margin-bottom: 10px;
+        background-color: #444;
+        color: #fff;
+      }
+
+      .footer {
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+
+      #real0x0a1 {
+        margin-top: 7px;
+      }
+
+      /* dark theme styles */
+      .list-group-item {
+        background-color: #444;
+        border-color: #555;
+      }
+      .list-group-item:hover {
+        background-color: #555;
+      }
+      .btn-secondary {
+        background-color: #666;
+        border-color: #777;
+      }
+      .btn-secondary:hover {
+        background-color: #777;
+      }
+      .btn-danger {
+        background-color: rgb(248, 44, 44);
+        border-color: rgb(239, 24, 24);
+      }
+      .btn-danger:hover {
+        background-color: rgb(224, 20, 20);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="display-4">GO TODO-LIST</h1>
+      <form action="/create" method="post">
+        <div class="form-group">
+          <input
+            type="text"
+            name="title"
+            class="form-control"
+            placeholder="Enter todo title"
+            style="background-color: #333; color: #fff"
+          />
+        </div>
+        <button type="submit" id="add-todo-button" class="btn btn-primary">
+          Add Todo
+        </button>
+      </form>
+      <ul class="list-group todo-list">
+        {{range.}}
+        <li class="list-group-item todo-item">
+          <span {{if.Done}}class="text-decoration-line-through" {{end}}
+            >{{.Title}}</span
+          >
+          <div class="float-right">
+            <a href="/delete/{{.ID}}" class="btn btn-sm btn-danger">Delete</a>
+          </div>
+        </li>
+        {{end}}
+      </ul>
+    </div>
+    <br /><br /><br /><br /><br /><br /><br /><br />
+    <br /><br /><br /><br /><br /><br /><br /><br />
+    <footer class="footer">
+      <p id="real0x0a1">
+        Created by
+        <a href="https://github.com/real0x0a1" target="_blank">real0x0a1</a>
+      </p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
