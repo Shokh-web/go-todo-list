@@ -29,13 +29,9 @@ A simple Todo List app built with Go and HTML/CSS.
 - Bootstrap 4 for styling
 - jQuery for JavaScript functionality
 
-## **License**
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
 ## **Author**
 
-[Your Name](https://github.com/your-username)
+[real0x0a1](https://github.com/real0x0a1)
 
 ## **Contributing**
 
