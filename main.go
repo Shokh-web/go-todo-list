@@ -1,3 +1,6 @@
+// -*- Author: -*-
+// -*- Info: -*-
+
 package main
 
 import (
