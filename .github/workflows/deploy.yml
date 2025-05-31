@@ -62,7 +62,7 @@ jobs:
             # Create directory if it doesn't exist
             mkdir -p /home/ubuntu/todo-app
             
-            # Copy docker-compose.yml to the server
+            # Copy necessary files to the server
             cat > /home/ubuntu/todo-app/docker-compose.yml << 'EOL'
             version: '3.8'
             services:
@@ -80,6 +80,12 @@ jobs:
                   - db
                 networks:
                   - todo-network
+                healthcheck:
+                  test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080"]
+                  interval: 30s
+                  timeout: 10s
+                  retries: 3
+                restart: unless-stopped
 
               db:
                 image: postgres:15-alpine
@@ -93,6 +99,12 @@ jobs:
                   - postgres_data:/var/lib/postgresql/data
                 networks:
                   - todo-network
+                healthcheck:
+                  test: ["CMD-SHELL", "pg_isready -U postgres"]
+                  interval: 10s
+                  timeout: 5s
+                  retries: 5
+                restart: unless-stopped
 
             networks:
               todo-network:
@@ -102,10 +114,37 @@ jobs:
               postgres_data:
             EOL
 
+            # Create a script to check deployment status
+            cat > /home/ubuntu/todo-app/check-deployment.sh << 'EOL'
+            #!/bin/bash
+            echo "Checking application status..."
+            if curl -s http://localhost:8080 > /dev/null; then
+                echo "Application is running!"
+                exit 0
+            else
+                echo "Application is not responding!"
+                docker-compose logs app
+                exit 1
+            fi
+            EOL
+            
+            chmod +x /home/ubuntu/todo-app/check-deployment.sh
+
             # Navigate to the application directory
             cd /home/ubuntu/todo-app
             
-            # Pull the latest image and restart containers
-            docker-compose pull app
-            docker-compose down
-            docker-compose up -d 
+            echo "Pulling latest images..."
+            docker-compose pull
+            
+            echo "Stopping existing containers..."
+            docker-compose down --remove-orphans
+            
+            echo "Starting new containers..."
+            docker-compose up -d
+            
+            # Wait for services to be ready
+            echo "Waiting for services to be ready..."
+            sleep 30
+            
+            # Check deployment status
+            ./check-deployment.sh 
