@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Shokh-web/todo-app/database"
+	"todo-app/database"
 )
 
 func main() {
