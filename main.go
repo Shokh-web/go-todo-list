@@ -2,7 +2,6 @@
 // -*- Info: A lightweight and easy-to-use Todo List app -*-
 // -*- File: main.go -*-
 
-
 package main
 
 import (
