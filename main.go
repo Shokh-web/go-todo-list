@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"todo-app/database"
+	"github.com/Shokh-web/go-todo-list/database"
 )
 
 func main() {

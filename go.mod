@@ -1,4 +1,4 @@
-module todo-app
+module github.com/Shokh-web/go-todo-list
 
 go 1.22
 
