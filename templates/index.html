@@ -3,116 +3,128 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GO TODO-LIST</title>
-    <!--   bootstrap CSS   -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    />
+    <title>Todo List</title>
     <style>
       body {
         font-family: Arial, sans-serif;
-        text-align: center;
-        background-color: #212121;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-      .container {
-        max-width: 600px;
-        margin: 40px auto;
+        max-width: 800px;
+        margin: 0 auto;
         padding: 20px;
-        background-color: #333;
-        border: 1px solid #444;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        border-radius: 10px;
+        background-color: #f5f5f5;
       }
-
-      #add-todo-button {
-        margin-bottom: 10px;
-        background-color: #444;
-        color: #fff;
+      .todo-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       }
-
-      .footer {
-        background-color: #333;
-        color: #fff;
+      .todo-form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .todo-form input[type="text"] {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .todo-form button {
+        padding: 8px 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .todo-form button:hover {
+        background-color: #45a049;
+      }
+      .todo-list {
+        list-style: none;
+        padding: 0;
+      }
+      .todo-item {
+        display: flex;
+        align-items: center;
         padding: 10px;
-        text-align: center;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
+        border-bottom: 1px solid #eee;
       }
-
-      #real0x0a1 {
-        margin-top: 7px;
+      .todo-item:last-child {
+        border-bottom: none;
       }
-
-      /* dark theme styles */
-      .list-group-item {
-        background-color: #444;
-        border-color: #555;
+      .todo-item.completed .todo-title {
+        text-decoration: line-through;
+        color: #888;
       }
-      .list-group-item:hover {
-        background-color: #555;
+      .todo-title {
+        flex: 1;
+        margin: 0 10px;
       }
-      .btn-secondary {
-        background-color: #666;
-        border-color: #777;
+      .todo-actions {
+        display: flex;
+        gap: 10px;
       }
-      .btn-secondary:hover {
-        background-color: #777;
+      .todo-actions form {
+        margin: 0;
       }
-      .btn-danger {
-        background-color: rgb(248, 44, 44);
-        border-color: rgb(239, 24, 24);
+      .todo-actions button {
+        padding: 4px 8px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
       }
-      .btn-danger:hover {
-        background-color: rgb(224, 20, 20);
+      .toggle-btn {
+        background-color: #2196F3;
+        color: white;
+      }
+      .delete-btn {
+        background-color: #f44336;
+        color: white;
+      }
+      .todo-description {
+        font-size: 0.9em;
+        color: #666;
+        margin-top: 4px;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1 class="display-4">GO TODO-LIST</h1>
-      <form action="/create" method="post">
-        <div class="form-group">
-          <input
-            type="text"
-            name="title"
-            class="form-control"
-            placeholder="Enter todo title"
-            style="background-color: #333; color: #fff"
-          />
-        </div>
-        <button type="submit" id="add-todo-button" class="btn btn-primary">
-          Add Todo
-        </button>
+    <div class="todo-container">
+      <h1>Todo List</h1>
+      
+      <form class="todo-form" action="/create" method="POST">
+        <input type="text" name="title" placeholder="What needs to be done?" required>
+        <input type="text" name="description" placeholder="Add a description (optional)">
+        <button type="submit">Add Todo</button>
       </form>
-      <ul class="list-group todo-list">
-        {{range.}}
-        <li class="list-group-item todo-item">
-          <span {{if.Done}}class="text-decoration-line-through" {{end}}
-            >{{.Title}}</span
-          >
-          <div class="float-right">
-            <a href="/delete/{{.ID}}" class="btn btn-sm btn-danger">Delete</a>
+
+      <ul class="todo-list">
+        {{range .}}
+        <li class="todo-item {{if .Completed}}completed{{end}}">
+          <div class="todo-content">
+            <h3 class="todo-title">{{.Title}}</h3>
+            {{if .Description}}
+            <p class="todo-description">{{.Description}}</p>
+            {{end}}
           </div>
+          <div class="todo-actions">
+            <form action="/toggle/{{.ID}}" method="POST">
+              <button type="submit" class="toggle-btn">
+                {{if .Completed}}Undo{{else}}Complete{{end}}
+              </button>
+            </form>
+            <form action="/delete/{{.ID}}" method="POST">
+              <button type="submit" class="delete-btn">Delete</button>
+            </form>
+          </div>
+        </li>
+        {{else}}
+        <li class="todo-item">
+          <p>No todos yet! Add one above.</p>
         </li>
         {{end}}
       </ul>
     </div>
-    <br /><br /><br /><br /><br /><br /><br /><br />
-    <br /><br /><br /><br /><br /><br /><br /><br />
-    <footer class="footer">
-      <p id="real0x0a1">
-        Created by
-        <a href="https://github.com/real0x0a1" target="_blank">real0x0a1</a>
-      </p>
-    </footer>
-
-    <!--   bootstrap JS   -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   </body>
 </html>
