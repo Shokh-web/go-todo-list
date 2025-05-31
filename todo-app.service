@@ -1,0 +1,14 @@
+[Unit]
+Description=Todo List Application
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/todo-app
+ExecStart=/home/ubuntu/todo-app/todo-app
+Restart=always
+Environment=PATH=/usr/local/go/bin:/usr/local/bin:/usr/bin:/bin
+
+[Install]
+WantedBy=multi-user.target 

@@ -18,9 +18,25 @@ type Todo struct {
 	Completed   bool   `json:"completed" gorm:"default:false"`
 }
 
+func getEnv(key, fallback string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return fallback
+}
+
 func InitDB() {
 	var err error
-	dsn := "host=localhost user=postgres password=0629 dbname=simple_blog port=5432 sslmode=disable"
+	
+	// Get database connection details from environment variables
+	dbHost := getEnv("DB_HOST", "localhost")
+	dbPort := getEnv("DB_PORT", "5432")
+	dbUser := getEnv("DB_USER", "postgres")
+	dbPass := getEnv("DB_PASSWORD", "0629")
+	dbName := getEnv("DB_NAME", "simple_blog")
+
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		dbHost, dbUser, dbPass, dbName, dbPort)
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
