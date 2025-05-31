@@ -31,13 +31,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          logout: true
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
+          platforms: linux/amd64
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/todo-app:latest
+          tags: |
+            ${{ secrets.DOCKER_HUB_USERNAME }}/todo-app:latest
+            ${{ secrets.DOCKER_HUB_USERNAME }}/todo-app:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
